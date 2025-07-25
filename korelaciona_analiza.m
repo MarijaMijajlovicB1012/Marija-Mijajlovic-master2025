@@ -15,7 +15,7 @@ var_names = {
     'immunity proxy'; 'fully vaccinated'; 'boosters'; 'stringency'; 'pop. density';
     'median age'; 'older population'; 'cardiovasc'; 'diabetes'; 'HDI';
     'mobility retail'; 'mobility grocery'; 'mobility parks'; 'mobility transit';
-    'mobility workplace'; 'mobility residential'; 'onset'; 'Ravg'
+    'mobility workplace'; 'mobility residential'; 'onset'; 'log(R_avg)'
     };
 
 % Colormap (Dark Red to White to Dark Blue)
@@ -94,6 +94,46 @@ set(gcf, 'Position', [100 100 800 700]); % [left bottom width height]
 
 
 
+%% Heatmap p vrednosti
+
+
+% Colormap (White to Dark Blue)
+num_colors_in_cmap = 256;
+cmap_p_value= interp1([0 0.5 1], ...
+                                 [1 1 1;
+                                  0.5 0.5 1;
+                                  0 0 0.5], ...
+                                 linspace(0, 1, num_colors_in_cmap)); 
+
+cmap_p_value(cmap_p_value < 0) = 0;
+cmap_p_value(cmap_p_value > 1) = 1;
+
+figure;
+imagesc(pValue);
+colormap(cmap_p_value);
+clim([0 1]);
+
+axis equal tight; 
+set(gca, 'YDir', 'reverse');
+
+set(gca, 'XTick', 1:length(var_names));
+set(gca, 'YTick', 1:length(var_names));
+set(gca, 'XTickLabel', var_names);
+set(gca, 'YTickLabel', var_names);
+
+xtickangle(45);
+
+title('P vrednost');
+
+cb = colorbar;
+cb.Label.String = 'P vrednost';
+cb.Ticks = [0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1];
+
+% Figure size
+set(gcf, 'Position', [100 100 800 700]); % [left bottom width height]
+
+
+
 %% Scatter plot paneli
 
 % Funkcija za pojedinacni scatter
@@ -140,10 +180,10 @@ end
 
 
 % zajednicka y osa za sve scattere
-y_var_name_display = 'Ravg';
-y_var_name_lookup = 'Ravg';
-idx_Ravg = find(strcmp(var_names, y_var_name_lookup));
-y_data = numeric_data2(:, idx_Ravg);
+y_var_name_display = 'log(R_avg)';
+y_var_name_lookup = 'log(R_avg)';
+Ravg = find(strcmp(var_names, y_var_name_lookup));
+y_data = numeric_data2(:, Ravg);
 
 disp('Generisanje scatter plotova...');
 
@@ -158,8 +198,8 @@ for k = 1:length(individual_x_vars)
 
     idx_x_var = find(strcmp(var_names, current_x_var_name_lookup));
     x_data = numeric_data2(:, idx_x_var); % x osa
-    coeff = koef(idx_x_var, idx_Ravg);    % koeficijent
-    p_val = pValue(idx_x_var, idx_Ravg);  % p vrednost
+    coeff = koef(idx_x_var, Ravg);    % koeficijent
+    p_val = pValue(idx_x_var, Ravg);  % p vrednost
     
     figure; % za svaki scatter
     ax = gca; % trenutna plotting area 
@@ -181,12 +221,12 @@ for k = 1:length(subplot_vars_1)
 
     idx_x_var = find(strcmp(var_names, current_x_var_name_lookup));
     x_data = numeric_data2(:, idx_x_var);
-    coeff = koef(idx_x_var, idx_Ravg);
-    p_val = pValue(idx_x_var, idx_Ravg);
+    coeff = koef(idx_x_var, Ravg);
+    p_val = pValue(idx_x_var, Ravg);
 
     plot_and_annotate_scatter(ax, x_data, y_data, current_x_var_name_display, y_var_name_display, coeff, p_val);
 end
-sgtitle('Ravg vs. Fully Vaccinated & Boosters'); % Naslov za zajednicki figure
+sgtitle('log(R_avg) vs. Fully Vaccinated & Boosters'); % Naslov za zajednicki figure
 
 % Panel 2: Median Age & Older Population
 figure; 
@@ -199,13 +239,13 @@ for k = 1:length(subplot_vars_2_display)
 
     idx_x_var = find(strcmp(var_names, current_x_var_name_lookup));
     x_data = numeric_data2(:, idx_x_var);
-    coeff = koef(idx_x_var, idx_Ravg);
-    p_val = pValue(idx_x_var, idx_Ravg);
+    coeff = koef(idx_x_var, Ravg);
+    p_val = pValue(idx_x_var, Ravg);
 
     plot_and_annotate_scatter(ax, x_data, y_data, current_x_var_name_display, y_var_name_display, coeff, p_val);
 end
-sgtitle('Ravg vs. Age Demographics');
-
+sgtitle('log(R_avg) vs. Age Demographics');
+    
 % Panel 3: Cardiovascular & Diabetes
 figure; 
 subplot_vars_3 = {'cardiovasc', 'diabetes'};
@@ -217,12 +257,12 @@ for k = 1:length(subplot_vars_3)
     idx_x_var = find(strcmp(var_names, current_x_var_name_lookup));
 
     x_data = numeric_data2(:, idx_x_var);
-    coeff = koef(idx_x_var, idx_Ravg);
-    p_val = pValue(idx_x_var, idx_Ravg);
+    coeff = koef(idx_x_var, Ravg);
+    p_val = pValue(idx_x_var, Ravg);
 
     plot_and_annotate_scatter(ax, x_data, y_data, current_x_var_name_display, y_var_name_display, coeff, p_val);
 end
-sgtitle('Ravg vs. Health Conditions');
+sgtitle('log(R_avg) vs. Health Conditions');
 disp('1x2 scatter plotovi kreirani');
 
 
@@ -239,12 +279,12 @@ for k = 1:length(mobility_x_vars)
 
     idx_x_var = find(strcmp(var_names, current_x_var_name_lookup));
     x_data = numeric_data2(:, idx_x_var);
-    coeff = koef(idx_x_var, idx_Ravg);
-    p_val = pValue(idx_x_var, idx_Ravg);
+    coeff = koef(idx_x_var, Ravg);
+    p_val = pValue(idx_x_var, Ravg);
 
     plot_and_annotate_scatter(ax, x_data, y_data, current_x_var_name_display, y_var_name_display, coeff, p_val);
 end
-sgtitle('Ravg vs. Mobility Indicators');
+sgtitle('log(R_avg) vs. Mobility Indicators');
 disp('2x3 panel plot kreiran');
 
 disp('Svi scatter polotvi kreirani');
