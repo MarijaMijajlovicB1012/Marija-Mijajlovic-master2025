@@ -2,7 +2,9 @@
 
 
 %% PRIPREMA GHSI PODATAKA
-load GHSI_2019_all_countries
+
+GHSI_2019_all_countries = readtable("GHSI_2019_extract_edit.xlsx")
+% load GHSI_2019_all_countries
 
 % provera postojanja duplikata
 
@@ -100,7 +102,7 @@ disp (GHSI_2019_104_drzave_sortirano_konacna_verzija)
 
 GHSI_transformisana= GHSI_2019_104_drzave_sortirano_konacna_verzija;
 varNames = GHSI_2019_104_drzave_sortirano_konacna_verzija.Properties.VariableNames;
-numVars = length(varNames); % Get the total number of columns
+numVars = length(varNames); % broj kolona
 
 for i=1:numVars
 
