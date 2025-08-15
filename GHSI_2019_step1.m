@@ -160,8 +160,8 @@ for i = 1:numVars
     trenutna_kolona_posle = GHSI_transformisana.(currentVarName);
 
     % racunanje skewnessa za svaku kolonu
-        skewness_vrednost_pre{i} = skewness(trenutna_kolona_pre);
-        skewness_vrednost_posle{i} = skewness(trenutna_kolona_posle);
+        skewness_vrednost_pre{i} = skewness(trenutna_kolona_pre,0);
+        skewness_vrednost_posle{i} = skewness(trenutna_kolona_posle,0);
 
 end
 % pravljenje tabele, {:} sluzi da bi se niz vrednosti mogao ubaciti u tabelu
