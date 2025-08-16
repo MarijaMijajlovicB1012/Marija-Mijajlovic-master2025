@@ -15,10 +15,10 @@ mobility_related = omicron_i_GHSI_tabela (:, {'mobility_retail','mobility_grocer
 
 %% standardizacija matrica za PCA
 
-age_related_standardzovano = (age_related - mean(age_related)) ./ std(age_related);
-vaccine_related_standardizovano = (vaccine_related - mean(vaccine_related)) ./ std(vaccine_related);
-GHSI_related_standardizovano = (GHSI_related- mean(GHSI_related)) ./ std(GHSI_related);
-mobility_related_standardzovano = (mobility_related - mean(mobility_related)) ./ std(mobility_related);
+age_related_standardzovano = normalize(age_related);
+vaccine_related_standardizovano = normalize(vaccine_related);
+GHSI_related_standardizovano = normalize (GHSI_related);
+mobility_related_standardzovano = normalize (mobility_related);
 
 %% PCA
 
@@ -74,10 +74,12 @@ disp(head(ghsi_grupisano));
 
 % mobility
 mobility_grupisano = table (omicron_i_GHSI_tabela.mobility_retail, omicron_i_GHSI_tabela.mobility_grocery, ...
-                            omicron_i_GHSI_tabela.mobility_parks, ...
+                            omicron_i_GHSI_tabela.mobility_parks, omicron_i_GHSI_tabela.mobility_transit, ...
+                            omicron_i_GHSI_tabela.mobility_workplace, omicron_i_GHSI_tabela.mobility_residential,...
                             principle_mobility_1, principle_mobility_2, principle_mobility_3, ...
                             omicron_i_GHSI_tabela.R_mean, ...
                             'VariableNames', {'Mobility_retail', 'Mobility_grocery', 'Mobility_parks',...
+                            'Mobility_transit', 'Mobility_workplace', 'Mobility_residential',...
                             'Principle_mobility_1', 'Principle_mobility_2', 'Principle_mobility_3', 'R_mean'});
 disp ('Grupisana mobility-related tabela: ');
 disp(head(mobility_grupisano));
