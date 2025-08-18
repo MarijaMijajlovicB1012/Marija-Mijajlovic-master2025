@@ -73,7 +73,7 @@ xtickangle (45) % nazivi pod uglom od 45 stepeni
 grid on;
 
 
-%% trazenje top 3 prediktoraredukovani model (bez top 3 prediktora)
+%% trazenje top 3 prediktora,redukovani model (bez top 3 prediktora)
 
 % top 3 prediktora
 [~, idx] = maxk(importance, 3);
