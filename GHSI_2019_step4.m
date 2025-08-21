@@ -84,7 +84,7 @@ reducedInputVars = input_vars(~ismember(input_vars,topPredictors_full)); % reduk
 importance_reduced = predictorImportance (Mdl_reduced); 
 
 % top 3 prediktora RF_reduced modela
-[~, idx] = maxk(importance, 3);
+[~, idx] = maxk(importance_reduced, 3);
 topPredictors_reduced = reducedInputVars(idx);
 disp('Top 3 prediktora redukovanog RF modela:');
 disp(topPredictors_reduced);
@@ -156,7 +156,7 @@ figure;
 surf(X1, X2, PD);
 xlabel('PC_Mobility_1');
 ylabel('PC_GHSI_1');
-zlabel('Partial Dependence');
+zlabel('Partial Dependence of Rt');
 title('3D Partial Dependence Plot (Reduced RF)');
 saveas(gcf, 'PDP_surface_reduced_RF.png');
 

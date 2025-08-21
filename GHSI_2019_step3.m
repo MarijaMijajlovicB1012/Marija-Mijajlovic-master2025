@@ -37,10 +37,11 @@ tic;
 
 Mdl = fitrensemble(X_normalizovano, R_t, ...
     'Method', 'Bag', ... % metod random foresta, bagging (bootstrap aggregating), vise decision trees na random setovima podataka
-    'OptimizeHyperparameters', {'MinLeafSize', 'NumLearningCycles'}, ... % optimizacija pojedinacnog stabla i broja ciklusa ucenja (broja stabala)
+    'OptimizeHyperparameters', {'MinLeafSize', 'MaxNumSplits'}, ... % optimizacija pojedinacnog stabla i broja ciklusa ucenja (broja stabala)
     'HyperparameterOptimizationOptions', MojaStruktura, ...
     'PredictorNames', X_normalizovano.Properties.VariableNames, ... % imena kolona input-a 
-    'ResponseName', 'R_t'); % ime output-a (u tabeli je R_mean, ali ovo je varijabla za treniranje)
+    'ResponseName', 'R_t',...
+    'NumLearningCycles', 500); % ime output-a (u tabeli je R_mean, ali ovo je varijabla za treniranje)
 
 % zaustavljanje tajmera
 vreme_treniranja = toc;
@@ -98,10 +99,11 @@ tic;
 % Redukovani model bez top 3 prediktora
 Mdl_reduced = fitrensemble(X_normalizovano_redukovano (:, reducedInputVars), R_t, ...
     'Method', 'Bag', ...
-    'OptimizeHyperparameters', {'MinLeafSize', 'NumLearningCycles'}, ...
+    'OptimizeHyperparameters', {'MinLeafSize', 'MaxNumSplits'}, ...
     'HyperparameterOptimizationOptions', MojaStruktura, ...
     'PredictorNames', reducedInputVars, ...
-    'ResponseName', 'R_t');
+    'ResponseName', 'R_t',...
+    'NumLearningCycles', 500);
 
 vreme_treniranja_redukovani = toc;
 vreme_treniranja_redukovani = vreme_treniranja_redukovani/60;
@@ -138,6 +140,4 @@ end
     xticklabels (nazivi_prediktora_reduced);
 xtickangle (45) % nazivi pod uglom od 45 stepeni
 grid on;
-
-
 
